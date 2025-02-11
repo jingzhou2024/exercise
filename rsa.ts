@@ -13,5 +13,18 @@ const { publicKey, privateKey } = crypto.generateKeyPairSync('rsa', {
   },
 });
 
-console.log('公钥:', publicKey);
-console.log('私钥:', privateKey);
+
+const hash4zero = "0000fc7d41c334f49f02ca6f9153433b209b7676bf0e4c754ae66ef22812e230";
+const sign = crypto.createSign('SHA256');
+sign.update(hash4zero);
+
+const signature = sign.sign(privateKey, 'base64');
+
+console.log('Name:', hash4zero);
+console.log('Signature:', signature);
+
+const verify = crypto.createVerify('SHA256');
+verify.update(hash4zero);
+const isVerified = verify.verify(publicKey, signature, 'base64');
+
+console.log('Signature verified:', isVerified);
